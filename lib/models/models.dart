@@ -7,13 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 var player = AudioCache();
 
-Tabata get defaultTabata => Tabata(
-  sets: 5,
-  reps: 5,
-  startDelay: Duration(seconds: 10),
-  exerciseTime: Duration(seconds: 20),
-  restTime: Duration(seconds: 10),
-  breakTime: Duration(seconds: 60),
+Exercise get defaultExercise => Exercise(
+  setTimer: Duration(seconds: 10)
 );
 
 class Settings {
@@ -61,55 +56,17 @@ class Settings {
   };
 }
 
-class Tabata {
-  /// Sets in a workout
-  int sets;
-
-  /// Reps in a set
-  int reps;
-
-  /// Time to exercise for in each rep
-  Duration exerciseTime;
-
-  /// Rest time between reps
-  Duration restTime;
-
-  /// Break time between sets
-  Duration breakTime;
-
-  /// Initial countdown before starting workout
-  Duration startDelay;
-
-  Tabata({
-    this.sets,
-    this.reps,
-    this.startDelay,
-    this.exerciseTime,
-    this.restTime,
-    this.breakTime,
+class Exercise {
+  Duration setTimer;
+  Exercise({
+    this.setTimer,
   });
 
-  Duration getTotalTime() {
-    return (exerciseTime * sets * reps) +
-        (restTime * sets * (reps - 1)) +
-        (breakTime * (sets - 1));
-  }
-
-  Tabata.fromJson(Map<String, dynamic> json)
-      : sets = json['sets'],
-        reps = json['reps'],
-        exerciseTime = Duration(seconds: json['exerciseTime']),
-        restTime = Duration(seconds: json['restTime']),
-        breakTime = Duration(seconds: json['breakTime']),
-        startDelay = Duration(seconds: json['startDelay']);
+  Exercise.fromJson(Map<String, dynamic> json)
+      : setTimer = Duration(seconds: json['setTimer']);
 
   Map<String, dynamic> toJson() => {
-    'sets': sets,
-    'reps': reps,
-    'exerciseTime': exerciseTime.inSeconds,
-    'restTime': restTime.inSeconds,
-    'breakTime': breakTime.inSeconds,
-    'startDelay': startDelay.inSeconds,
+    'setTimer': setTimer,
   };
 }
 
@@ -118,7 +75,7 @@ enum WorkoutState { initial, starting, exercising, resting, breaking, finished }
 class Workout {
   Settings _settings;
 
-  Tabata _config;
+  Exercise _config;
 
   /// Callback for when the workout's state has changed.
   Function _onStateChange;
@@ -144,10 +101,10 @@ class Workout {
   start() {
     if (_step == WorkoutState.initial) {
       _step = WorkoutState.starting;
-      if (_config.startDelay.inSeconds == 0) {
+      if (_config.setTimer.inSeconds == 0) {
         _nextStep();
       } else {
-        _timeLeft = _config.startDelay;
+        _timeLeft = _config.setTimer;
       }
     }
     _timer = Timer.periodic(Duration(seconds: 1), _tick);
@@ -191,31 +148,6 @@ class Workout {
       return Future.value();
     }
     return player.play(sound);
-  }
-
-  _startBreak() {
-    _step = WorkoutState.breaking;
-    if (_config.breakTime.inSeconds == 0) {
-      _nextStep();
-      return;
-    }
-    _timeLeft = _config.breakTime;
-    _playSound(_settings.startBreak);
-  }
-
-
-  _finish() {
-    _timer.cancel();
-    _step = WorkoutState.finished;
-    _timeLeft = Duration(seconds: 0);
-    _playSound(_settings.endWorkout).then((p) {
-      if (p == null) {
-        return;
-      }
-      p.onPlayerCompletion.first.then((_) {
-        _playSound(_settings.endWorkout);
-      });
-    });
   }
 
   get config => _config;
