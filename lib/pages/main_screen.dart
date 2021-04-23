@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:audioplayers/audio_cache.dart';
-import 'package:exercise_timer/widgets/durationpicker.dart';
 import 'package:exercise_timer/widgets/new_timer.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +13,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   List<Duration> _timeList = [];
+  List<Duration> _activeList = [];
   int _playTime = 0;
   Timer _timer;
   Duration _time = Duration(seconds: 10);
@@ -27,21 +27,26 @@ class _MainScreenState extends State<MainScreen> {
   void _addTimer(Duration timer) {
     setState(() {
       _timeList.add(timer);
+      _activeList = []..addAll(_timeList);
     });
   }
 
   _tick(Timer timer) {
     setState(() {
-      _timeList[_playTime] -= Duration(seconds: 1);
-      if (_timeList[_playTime].inSeconds <= 0) {
+      _activeList[_playTime] -= Duration(seconds: 1);
+      if (_activeList[_playTime].inSeconds <= 0) {
         _playSound('boop.mp3');
         _playTime += 1;
-      } else if (_timeList[_playTime].inSeconds <= 3 &&
-          _timeList[_playTime].inSeconds >= 1) {
+      } else if (_activeList[_playTime].inSeconds <= 3 &&
+          _activeList[_playTime].inSeconds >= 1) {
         _playSound('pip.mp3');
       }
-      if (_timeList.length == _playTime) {
+      if (_activeList.length == _playTime) {
         _timer.cancel();
+        _playTime=0;
+        _activeList = []..addAll(_timeList);
+        print(_activeList);
+        print(_timeList);
       }
     });
   }
@@ -84,8 +89,7 @@ class _MainScreenState extends State<MainScreen> {
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.list),
-                  onPressed: () {
-                  },
+                  onPressed: () {},
                 ),
                 IconButton(
                   icon: Icon(Icons.add),
@@ -104,7 +108,7 @@ class _MainScreenState extends State<MainScreen> {
         color: Colors.white,
       ),
       body: ListView(
-        children: _timeList.map((mapTime) {
+        children: _activeList.map((mapTime) {
           return Container(
             margin: const EdgeInsets.all(16),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),

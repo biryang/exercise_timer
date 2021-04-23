@@ -1,6 +1,5 @@
 import 'package:exercise_timer/models.dart';
 import 'package:exercise_timer/pages/main_screen.dart';
-import 'package:exercise_timer/pages/tabata_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,18 +28,5 @@ class _TimerAppState extends State<TimerApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(home: MainScreen());
-    return MaterialApp(
-      title: 'Interval Timer',
-      theme: ThemeData(
-        primarySwatch: widget.settings.primarySwatch,
-        brightness:
-            widget.settings.nightMode ? Brightness.dark : Brightness.light,
-      ),
-      home: TabataScreen(
-        settings: widget.settings,
-        prefs: widget.prefs,
-        onSettingsChanged: _onSettingsChanged,
-      ),
-    );
   }
 }
