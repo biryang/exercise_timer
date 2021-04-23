@@ -1,7 +1,11 @@
 import 'dart:async';
 
 import 'package:audioplayers/audio_cache.dart';
+import 'package:exercise_timer/widgets/durationpicker.dart';
+import 'package:exercise_timer/widgets/new_timer.dart';
 import 'package:flutter/material.dart';
+
+import '../utils.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -10,7 +14,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   List<Duration> _timeList = [];
-  int _playTime=0;
+  int _playTime = 0;
   Timer _timer;
   Duration _time = Duration(seconds: 10);
   bool _isPlaying = false;
@@ -20,8 +24,10 @@ class _MainScreenState extends State<MainScreen> {
     _timer = Timer.periodic(Duration(seconds: 1), _tick);
   }
 
-  void _addTimer() {
-    _timeList.add(Duration(seconds: 10));
+  void _addTimer(Duration timer) {
+    setState(() {
+      _timeList.add(timer);
+    });
   }
 
   _tick(Timer timer) {
@@ -30,7 +36,8 @@ class _MainScreenState extends State<MainScreen> {
       if (_timeList[_playTime].inSeconds <= 0) {
         _playSound('boop.mp3');
         _playTime += 1;
-      } else if (_timeList[_playTime].inSeconds <= 3 && _timeList[_playTime].inSeconds >= 1) {
+      } else if (_timeList[_playTime].inSeconds <= 3 &&
+          _timeList[_playTime].inSeconds >= 1) {
         _playSound('pip.mp3');
       }
       if (_timeList.length == _playTime) {
@@ -43,12 +50,21 @@ class _MainScreenState extends State<MainScreen> {
     return player.play(sound);
   }
 
+  void _startAddNewTimer(BuildContext ctx) {
+    showModalBottomSheet(
+      context: ctx,
+      builder: (_) {
+        return GestureDetector(
+          child: NewTimer(_addTimer),
+          behavior: HitTestBehavior.opaque,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          // title: Text(widget.title),
-          ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -69,12 +85,14 @@ class _MainScreenState extends State<MainScreen> {
                 IconButton(
                   icon: Icon(Icons.list),
                   onPressed: () {
-                    setState(() {
-                      _addTimer();
-                    });
                   },
                 ),
-                IconButton(icon: Icon(Icons.add)),
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    _startAddNewTimer(context);
+                  },
+                ),
                 Text(''),
                 IconButton(icon: Icon(Icons.delete)),
                 IconButton(icon: Icon(Icons.settings)),
@@ -88,8 +106,8 @@ class _MainScreenState extends State<MainScreen> {
       body: ListView(
         children: _timeList.map((mapTime) {
           return Container(
-            margin: const EdgeInsets.all(10),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            margin: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [Color(0xFF6448FE), Color(0xFF5FC6FF)],
@@ -108,38 +126,18 @@ class _MainScreenState extends State<MainScreen> {
             ),
             child: Column(
               children: [
-                Text('$mapTime'),
+                Text(
+                  formatTime(mapTime),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                // DurationPickerDialog(
+                //   initialDuration: Duration(seconds: 0),
+                //   title: Text('타이머'),
+                // )
               ],
             ),
           );
         }).toList(),
-        // children: [
-        //   Container(
-        //     margin: const EdgeInsets.all(10),
-        //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        //     decoration: BoxDecoration(
-        //       gradient: LinearGradient(
-        //         colors: [Color(0xFF6448FE), Color(0xFF5FC6FF)],
-        //         begin: Alignment.centerLeft,
-        //         end: Alignment.centerRight,
-        //       ),
-        //       boxShadow: [
-        //         BoxShadow(
-        //           color: Color(0xFF5FC6FF).withOpacity(0.4),
-        //           blurRadius: 8,
-        //           spreadRadius: 2,
-        //           offset: Offset(4, 4),
-        //         ),
-        //       ],
-        //       borderRadius: BorderRadius.all(Radius.circular(24)),
-        //     ),
-        //     child: Column(
-        //       children: [
-        //         Text('$_time'),
-        //       ],
-        //     ),
-        //   ),
-        // ],
       ),
     );
   }
