@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:audioplayers/audio_cache.dart';
+import 'package:exercise_timer/controllers/routineController.dart';
 import 'package:exercise_timer/widgets/new_timer.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../utils.dart';
 
@@ -16,9 +18,9 @@ class _MainScreenState extends State<MainScreen> {
   List<Duration> _activeList = [];
   int _playTime = 0;
   Timer _timer;
-  Duration _time = Duration(seconds: 10);
-  bool _isPlaying = false;
   AudioCache player = AudioCache();
+
+  final controller = Get.put(RoutineController());
 
   void _start() {
     _timer = Timer.periodic(Duration(seconds: 1), _tick);
@@ -43,7 +45,7 @@ class _MainScreenState extends State<MainScreen> {
       }
       if (_activeList.length == _playTime) {
         _timer.cancel();
-        _playTime=0;
+        _playTime = 0;
         _activeList = []..addAll(_timeList);
         print(_activeList);
         print(_timeList);
@@ -85,21 +87,20 @@ class _MainScreenState extends State<MainScreen> {
           child: Container(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.list),
                   onPressed: () {},
                 ),
+                Text(''),
                 IconButton(
-                  icon: Icon(Icons.add),
+                  icon: Icon(Icons.settings),
                   onPressed: () {
-                    _startAddNewTimer(context);
+                    controller.addRoutine();
+                    controller.readRoutine();
                   },
                 ),
-                Text(''),
-                IconButton(icon: Icon(Icons.delete)),
-                IconButton(icon: Icon(Icons.settings)),
               ],
             ),
           ),
@@ -107,41 +108,89 @@ class _MainScreenState extends State<MainScreen> {
         shape: CircularNotchedRectangle(),
         color: Colors.white,
       ),
-      body: ListView(
-        children: _activeList.map((mapTime) {
-          return Container(
-            margin: const EdgeInsets.all(16),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF6448FE), Color(0xFF5FC6FF)],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                '타이머를 추가해주세요!',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xFF5FC6FF).withOpacity(0.4),
-                  blurRadius: 8,
-                  spreadRadius: 2,
-                  offset: Offset(4, 4),
+              Expanded(
+                child: ListView(
+                  children: (_activeList.map((mapTime) {
+                        return Container(
+                          margin: const EdgeInsets.all(16),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 16),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [Color(0xFF6448FE), Color(0xFF5FC6FF)],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color(0xFF5FC6FF).withOpacity(0.4),
+                                blurRadius: 8,
+                                spreadRadius: 2,
+                                offset: Offset(4, 4),
+                              ),
+                            ],
+                            borderRadius: BorderRadius.all(Radius.circular(24)),
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
+                                formatTime(mapTime),
+                                style: TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold),
+                              ),
+                              // DurationPickerDialog(
+                              //   initialDuration: Duration(seconds: 0),
+                              //   title: Text('타이머'),
+                              // )
+                            ],
+                          ),
+                        );
+                      }).toList()) +
+                      [
+                        Container(
+                          child: GestureDetector(
+                            onTap: () {
+                              _startAddNewTimer(context);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.all(16),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color(0xFF000000).withOpacity(0.25),
+                                    blurRadius: 2,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(24)),
+                              ),
+                              child: Icon(Icons.add),
+                            ),
+                          ),
+                        )
+                      ],
                 ),
-              ],
-              borderRadius: BorderRadius.all(Radius.circular(24)),
-            ),
-            child: Column(
-              children: [
-                Text(
-                  formatTime(mapTime),
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                // DurationPickerDialog(
-                //   initialDuration: Duration(seconds: 0),
-                //   title: Text('타이머'),
-                // )
-              ],
-            ),
-          );
-        }).toList(),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

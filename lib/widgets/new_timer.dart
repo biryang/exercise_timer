@@ -79,7 +79,9 @@ class _NewTimerState extends State<NewTimer> {
                   children: [
                     Expanded(
                       child: TextButton(
-                        onPressed: _submitData,
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },
                         child: Text('CANCEL'),
                       ),
                     ),
