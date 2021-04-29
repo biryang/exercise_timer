@@ -7,18 +7,20 @@ import 'package:exercise_timer/models/timer_model.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 
+const btnStart = 'start';
+const btnStop = 'stop';
+
 class MainController extends GetxController {
   List<Map<int, String>> routineList = [];
   List<TimerModel> timerList = [];
-  List<Duration> timeList = [];
-  List<Duration> activeList = [];
+  String playBtn = btnStart;
   int _playTime = 0;
   Timer _timer;
-  AudioCache player = AudioCache();
+  AudioCache _player = AudioCache();
 
   addRoutine(String routineTitle) async {
-    var box = await Hive.openBox<RoutineModel>('routines');
-    box.add(
+    var _box = await Hive.openBox<RoutineModel>('routines');
+    _box.add(
       RoutineModel(
         title: routineTitle,
         index: 1,
@@ -30,22 +32,20 @@ class MainController extends GetxController {
   }
 
   readRoutine() async {
-    var box = await Hive.openBox<RoutineModel>('routines');
+    var _box = await Hive.openBox<RoutineModel>('routines');
     List<Map<int, String>> readRoutines = [];
-    for (int index = 0; index < box.length; index++) {
-      print('index : $index, key: ${box.getAt(index).key}');
-      readRoutines.add({box.getAt(index).key: box.getAt(index).title});
+    for (int index = 0; index < _box.length; index++) {
+      print('index : $index, key: ${_box.getAt(index).key}');
+      readRoutines.add({_box.getAt(index).key: _box.getAt(index).title});
     }
     routineList = readRoutines;
     update();
 
-    print('routineList');
-    print(routineList);
-    print('read items ${box.length}');
+    print('read items ${_box.length}');
   }
 
   addTimer({int key, String title, int timeout}) async {
-    var box = await Hive.openBox<RoutineModel>('routines');
+    var _box = await Hive.openBox<RoutineModel>('routines');
     String toJson;
     timerList.add(TimerModel(
       title: title,
@@ -55,68 +55,75 @@ class MainController extends GetxController {
 
     toJson = jsonEncode(timerList);
     print(toJson);
-    box.put(
+    _box.put(
         key,
         RoutineModel(
-            title: box.get(key).title,
-            index: box.get(key).index,
+            title: _box.get(key).title,
+            index: _box.get(key).index,
             timerList: toJson));
-
-    timeList.add(Duration(seconds: timeout));
-    activeList = []..addAll(timeList);
-    readRoutine();
-    readTimer(key: key);
+    update();
   }
 
   readTimer({int key}) async {
-    var box = await Hive.openBox<RoutineModel>('routines');
+    var _box = await Hive.openBox<RoutineModel>('routines');
     List<TimerModel> _tempList = [];
 
-    print('routineTitle : ${box.get(key).title}');
-    print('timerList : ${box.get(key).timerList}');
-    print('========Decode========');
-    // print(jsonDecode(box.get(key).timerList)[0]['timeout']);
-    if (box.get(key).timerList != null) {
-      for (var data in jsonDecode(box.get(key).timerList)) {
+    print('routineTitle : ${_box.get(key).title}');
+    print('timerList : ${_box.get(key).timerList}');
+    if (_box.get(key).timerList != null) {
+      for (var data in jsonDecode(_box.get(key).timerList)) {
         _tempList.add(TimerModel(
             title: data['title'],
             index: data['index'],
             timeout: data['timeout']));
       }
       timerList = []..addAll(_tempList);
-    }else{
+    } else {
       timerList = [];
     }
-    print('========List========');
-    print(timerList);
     update();
   }
 
-  start() {
+  timerState() {
+    switch (playBtn) {
+      case btnStart:
+        timerStart();
+        break;
+      case btnStop:
+        timerStop();
+        break;
+    }
+  }
+
+  timerStop() {
+    playBtn = btnStart;
+    _timer.cancel();
+    update();
+  }
+
+  timerStart() {
+    playBtn = btnStop;
     _timer = Timer.periodic(Duration(seconds: 1), _tick);
+    update();
   }
 
   _tick(Timer timer) {
-    activeList[_playTime] -= Duration(seconds: 1);
     timerList[_playTime].timeout -= 1;
-    if (activeList[_playTime].inSeconds <= 0) {
+    if (timerList[_playTime].timeout <= 0) {
       _playSound('boop.mp3');
       _playTime += 1;
-    } else if (activeList[_playTime].inSeconds <= 3 &&
-        activeList[_playTime].inSeconds >= 1) {
+    } else if (timerList[_playTime].timeout <= 3 &&
+        timerList[_playTime].timeout >= 1) {
       _playSound('pip.mp3');
     }
-    if (activeList.length == _playTime) {
+    if (timerList.length == _playTime) {
       _timer.cancel();
       _playTime = 0;
-      activeList = []..addAll(timeList);
-      print(activeList);
-      print(timeList);
     }
     update();
   }
 
   Future _playSound(String sound) {
-    return player.play(sound);
+    return _player.play(sound);
   }
 }

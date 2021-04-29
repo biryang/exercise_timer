@@ -22,10 +22,12 @@ class TimerPage extends StatelessWidget {
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              controller.start();
+              controller.timerState();
             },
             tooltip: 'Increment',
-            child: Icon(Icons.play_arrow),
+            child: controller.playBtn == btnStart
+                ? Icon(Icons.play_arrow)
+                : Icon(Icons.pause),
             elevation: 2.0,
           ),
           bottomNavigationBar: BottomAppBar(
@@ -38,8 +40,7 @@ class TimerPage extends StatelessWidget {
                   children: <Widget>[
                     IconButton(
                       icon: Icon(Icons.list),
-                      onPressed: () {
-                      },
+                      onPressed: () {},
                     ),
                     Text(''),
                     IconButton(
