@@ -9,7 +9,7 @@ class RoutineModel extends HiveObject {
   @HiveField(1)
   int index;
   @HiveField(2)
-  HiveList timeList;
+  List timeList;
 
   RoutineModel({
     this.title,
@@ -25,11 +25,14 @@ class TimeModel {
   @HiveField(1)
   int index;
   @HiveField(2)
-  String time;
+  int minutes = 0;
+  @HiveField(3)
+  int seconds = 0;
 
   TimeModel({
     this.title,
     this.index,
-    this.time,
+    this.minutes,
+    this.seconds,
   });
 }

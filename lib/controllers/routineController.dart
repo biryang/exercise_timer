@@ -4,24 +4,47 @@ import 'package:hive/hive.dart';
 
 class RoutineController extends GetxController {
   List routines = [];
+  List timers = [];
 
-  addRoutine() async {
+  addRoutine(String routineTitle) async {
     var box = await Hive.openBox<RoutineModel>('routines');
-    box.put(
-      1,
+    box.add(
       RoutineModel(
-        title: 'test',
+        title: routineTitle,
         index: 1,
       ),
     );
+    routines.add(routineTitle);
     update();
-    print('add');
+    print('routine ${routineTitle} add');
   }
 
   readRoutine() async {
     var box = await Hive.openBox<RoutineModel>('routines');
-    print('${box.get(1).index}');
+    List readRoutines = [];
+    for (int index = 0; index < box.length; index++) {
+      print(index);
+      print(box.getAt(index).title);
+      readRoutines.add(box.getAt(index).title);
+      print(routines);
+    }
+    routines = readRoutines;
     update();
-    print('read');
+
+    print('read items ${box.length}');
+  }
+
+  addTimes({String title, int minutes, int seconds}) async {
+    var box = await Hive.openBox<RoutineModel>('routines');
+    timers.add(
+      TimeModel(title: title, index: 1, minutes: minutes, seconds: seconds),
+    );
+
+    box.putAt(0, RoutineModel(timeList: timers));
+    update();
+  }
+
+  readTimes() async {
+    var box = await Hive.openBox<RoutineModel>('routines');
   }
 }

@@ -19,7 +19,7 @@ class RoutineModelAdapter extends TypeAdapter<RoutineModel> {
     return RoutineModel(
       title: fields[0] as String,
       index: fields[1] as int,
-      timeList: (fields[2] as HiveList)?.castHiveList(),
+      timeList: (fields[2] as List)?.cast<dynamic>(),
     );
   }
 
@@ -59,20 +59,23 @@ class TimeModelAdapter extends TypeAdapter<TimeModel> {
     return TimeModel(
       title: fields[0] as String,
       index: fields[1] as int,
-      time: fields[2] as String,
+      minutes: fields[2] as int,
+      seconds: fields[3] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, TimeModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
       ..write(obj.index)
       ..writeByte(2)
-      ..write(obj.time);
+      ..write(obj.minutes)
+      ..writeByte(3)
+      ..write(obj.seconds);
   }
 
   @override
