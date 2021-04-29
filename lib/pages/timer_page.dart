@@ -1,27 +1,29 @@
 import 'dart:async';
 
 import 'package:audioplayers/audio_cache.dart';
-import 'package:exercise_timer/controllers/routineController.dart';
+import 'package:exercise_timer/controllers/mainController.dart';
 import 'package:exercise_timer/widgets/new_timer.dart';
+import 'package:exercise_timer/widgets/new_timer_card.dart';
+import 'package:exercise_timer/widgets/timer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../utils.dart';
 
-class TimerPage extends StatefulWidget {
-  @override
-  _TimerPageState createState() => _TimerPageState();
-}
+class TimerPage extends StatelessWidget {
+  final int routineKey;
+  final String routineValue;
 
-class _TimerPageState extends State<TimerPage> {
-  final controller = Get.put(RoutineController());
+  TimerPage({this.routineKey, this.routineValue});
 
-  void _startAddNewTimer(BuildContext ctx) {
+  final controller = Get.put(MainController());
+
+  void _startAddNewTimer(BuildContext context) {
     showModalBottomSheet(
-      context: ctx,
+      context: context,
       builder: (_) {
         return GestureDetector(
-          child: NewTimer(),
+          child: NewTimer(routineKey),
           behavior: HitTestBehavior.opaque,
         );
       },
@@ -30,7 +32,8 @@ class _TimerPageState extends State<TimerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<RoutineController>(
+    controller.readTimer(key: routineKey);
+    return GetBuilder<MainController>(
       builder: (_) {
         return Scaffold(
           floatingActionButtonLocation:
@@ -53,7 +56,8 @@ class _TimerPageState extends State<TimerPage> {
                   children: <Widget>[
                     IconButton(
                       icon: Icon(Icons.list),
-                      onPressed: () {},
+                      onPressed: () {
+                      },
                     ),
                     Text(''),
                     IconButton(
@@ -74,7 +78,7 @@ class _TimerPageState extends State<TimerPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    '타이머를 추가해주세요!',
+                    '${this.routineKey} : ${this.routineValue}\n타이머를 추가해주세요!',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -82,72 +86,10 @@ class _TimerPageState extends State<TimerPage> {
                   ),
                   Expanded(
                     child: ListView(
-                      children:
-                      (_.timerList.map((_data) {
-                            return Container(
-                              margin: const EdgeInsets.all(16),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 16),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Color(0xFF6448FE),
-                                    Color(0xFF5FC6FF)
-                                  ],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color(0xFF5FC6FF).withOpacity(0.4),
-                                    blurRadius: 8,
-                                    spreadRadius: 2,
-                                    offset: Offset(4, 4),
-                                  ),
-                                ],
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(24)),
-                              ),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    formatTime(Duration(seconds: _data.timeout)),
-                                    style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            );
+                      children: (_.timerList.map((_data) {
+                            return Container(child: TimerCard(_data.timeout));
                           }).toList()) +
-                          [
-                            Container(
-                              child: GestureDetector(
-                                onTap: () {
-                                  _startAddNewTimer(context);
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.all(16),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 16),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color:
-                                            Color(0xFF000000).withOpacity(0.25),
-                                        blurRadius: 2,
-                                        offset: Offset(0, 2),
-                                      ),
-                                    ],
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(24)),
-                                  ),
-                                  child: Icon(Icons.add),
-                                ),
-                              ),
-                            )
-                          ],
+                          [Container(child: NewTimerCard(routineKey))],
                     ),
                   ),
                 ],

@@ -1,25 +1,28 @@
-import 'package:exercise_timer/controllers/routineController.dart';
+import 'package:exercise_timer/controllers/mainController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class NewTimer extends StatefulWidget {
-  NewTimer();
+  final int routineKey;
+
+  NewTimer(this.routineKey);
 
   @override
   _NewTimerState createState() => _NewTimerState();
 }
 
 class _NewTimerState extends State<NewTimer> {
-  final controller = Get.put(RoutineController());
+  final controller = Get.put(MainController());
   final titleController = TextEditingController();
   int minutes = 0;
   int seconds = 0;
 
   void _submitData() {
     controller.addTimer(
+      key: widget.routineKey,
       title: titleController.text,
-      timeout: (minutes * 60)  + seconds,
+      timeout: (minutes * 60) + seconds,
     );
   }
 
@@ -39,7 +42,7 @@ class _NewTimerState extends State<NewTimer> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               TextField(
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: InputDecoration(labelText: '${widget.routineKey} Title'),
                 controller: titleController,
               ),
               Container(

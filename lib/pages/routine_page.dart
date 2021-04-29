@@ -1,32 +1,25 @@
-import 'package:exercise_timer/controllers/routineController.dart';
+import 'package:exercise_timer/controllers/mainController.dart';
 import 'package:exercise_timer/pages/timer_page.dart';
 import 'package:exercise_timer/widgets/new_routine.dart';
+import 'package:exercise_timer/widgets/new_routine_card.dart';
 import 'package:exercise_timer/widgets/new_timer.dart';
+import 'package:exercise_timer/widgets/routine_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class RoutinePage extends StatelessWidget {
-  final controller = Get.put(RoutineController());
+  final controller = Get.put(MainController());
 
-  void _addTimer(String title) {
-    controller.addRoutine(title);
-  }
-
-  void _startAddNewTimer(BuildContext ctx) {
-    showModalBottomSheet(
-      context: ctx,
-      builder: (_) {
-        return GestureDetector(
-          child: NewRoutine(_addTimer),
-          behavior: HitTestBehavior.opaque,
-        );
-      },
-    );
+  void onRoute(Map<int, String> data) {
+    Get.to(TimerPage(
+      routineKey: data.keys.first,
+      routineValue: data.values.first,
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<RoutineController>(
+    return GetBuilder<MainController>(
       builder: (_) {
         return Scaffold(
           floatingActionButtonLocation:
@@ -78,82 +71,15 @@ class RoutinePage extends StatelessWidget {
                   ),
                   Expanded(
                     child: ListView(
-                      children: (controller.routines.map((mapTime) {
+                      children: (controller.routineList.map((_data) {
                             return Container(
-                              child: GestureDetector(
-                                onTap: (){
-                                  Get.to(TimerPage());
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.all(16),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 16),
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xFF6448FE),
-                                        Color(0xFF5FC6FF)
-                                      ],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Color(0xFF5FC6FF).withOpacity(0.4),
-                                        blurRadius: 8,
-                                        spreadRadius: 2,
-                                        offset: Offset(4, 4),
-                                      ),
-                                    ],
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(24)),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        mapTime,
-                                        style: TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      // DurationPickerDialog(
-                                      //   initialDuration: Duration(seconds: 0),
-                                      //   title: Text('타이머'),
-                                      // )
-                                    ],
-                                  ),
-                                ),
+                              child: RoutineCard(
+                                title: '${_data.values.first} ${_data.keys.first}',
+                                onTap: () => onRoute(_data),
                               ),
                             );
                           }).toList()) +
-                          [
-                            Container(
-                              child: GestureDetector(
-                                onTap: () {
-                                  _startAddNewTimer(context);
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.all(16),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 16),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color:
-                                            Color(0xFF000000).withOpacity(0.25),
-                                        blurRadius: 2,
-                                        offset: Offset(0, 2),
-                                      ),
-                                    ],
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(24)),
-                                  ),
-                                  child: Icon(Icons.add),
-                                ),
-                              ),
-                            ),
-                          ],
+                          [Container(child: NewRoutineCard())],
                     ),
                   ),
                 ],
