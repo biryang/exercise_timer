@@ -1,24 +1,30 @@
+import 'package:exercise_timer/controllers/routineController.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class NewTimer extends StatefulWidget {
-  final Function addTimer;
-
-  NewTimer(this.addTimer);
+  NewTimer();
 
   @override
   _NewTimerState createState() => _NewTimerState();
 }
 
 class _NewTimerState extends State<NewTimer> {
+  final controller = Get.put(RoutineController());
   final titleController = TextEditingController();
   int minutes = 0;
   int seconds = 0;
 
   void _submitData() {
-    setState(() {
-      widget.addTimer(Duration(minutes: minutes, seconds: seconds));
-    });
+    print(titleController.text);
+    print('${minutes}');
+    print('${seconds}');
+    controller.addTimes(
+      title: titleController.text,
+      minutes: minutes,
+      seconds: seconds,
+    );
   }
 
   @override
@@ -79,7 +85,7 @@ class _NewTimerState extends State<NewTimer> {
                   children: [
                     Expanded(
                       child: TextButton(
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.pop(context);
                         },
                         child: Text('CANCEL'),
