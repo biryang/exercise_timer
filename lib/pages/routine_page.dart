@@ -1,8 +1,6 @@
 import 'package:exercise_timer/controllers/mainController.dart';
 import 'package:exercise_timer/pages/timer_page.dart';
-import 'package:exercise_timer/widgets/new_routine.dart';
 import 'package:exercise_timer/widgets/new_routine_card.dart';
-import 'package:exercise_timer/widgets/new_timer.dart';
 import 'package:exercise_timer/widgets/routine_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -57,33 +55,33 @@ class RoutinePage extends StatelessWidget {
             color: Colors.white,
           ),
           body: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
                     '루틴을 추가해주세요!',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Expanded(
-                    child: ListView(
-                      children: (controller.routineList.map((_data) {
-                            return Container(
-                              child: RoutineCard(
-                                title: '${_data.values.first} ${_data.keys.first}',
-                                onTap: () => onRoute(_data),
-                              ),
-                            );
-                          }).toList()) +
-                          [Container(child: NewRoutineCard())],
-                    ),
+                ),
+                Expanded(
+                  child: ListView(
+                    children: (controller.routineList.map((_data) {
+                          return Container(
+                            child: RoutineCard(
+                              title: '${_data.values.first} ${_data.keys.first}',
+                              onTap: () => onRoute(_data),
+                            ),
+                          );
+                        }).toList()) +
+                        [Container(child: NewRoutineCard())],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );

@@ -46,24 +46,24 @@ class MainController extends GetxController {
 
   addTimer({int key, String title, int timeout}) async {
     var box = await Hive.openBox<RoutineModel>('routines');
-    // String toJson;
-    // timerList.add(TimerModel(
-    //   title: title,
-    //   index: 1,
-    //   timeout: timeout,
-    // ));
-    //
-    // toJson = jsonEncode(timerList);
-    // print(toJson);
-    // box.put(
-    //     key,
-    //     RoutineModel(
-    //         title: box.get(key).title,
-    //         index: box.get(key).index,
-    //         timerList: toJson));
+    String toJson;
+    timerList.add(TimerModel(
+      title: title,
+      index: 1,
+      timeout: timeout,
+    ));
 
-    // timeList.add(Duration(seconds: timeout));
-    // activeList = []..addAll(timeList);
+    toJson = jsonEncode(timerList);
+    print(toJson);
+    box.put(
+        key,
+        RoutineModel(
+            title: box.get(key).title,
+            index: box.get(key).index,
+            timerList: toJson));
+
+    timeList.add(Duration(seconds: timeout));
+    activeList = []..addAll(timeList);
     readRoutine();
     readTimer(key: key);
   }

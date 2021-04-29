@@ -1,14 +1,8 @@
-import 'dart:async';
-
-import 'package:audioplayers/audio_cache.dart';
 import 'package:exercise_timer/controllers/mainController.dart';
-import 'package:exercise_timer/widgets/new_timer.dart';
 import 'package:exercise_timer/widgets/new_timer_card.dart';
 import 'package:exercise_timer/widgets/timer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../utils.dart';
 
 class TimerPage extends StatelessWidget {
   final int routineKey;
@@ -17,18 +11,6 @@ class TimerPage extends StatelessWidget {
   TimerPage({this.routineKey, this.routineValue});
 
   final controller = Get.put(MainController());
-
-  void _startAddNewTimer(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (_) {
-        return GestureDetector(
-          child: NewTimer(routineKey),
-          behavior: HitTestBehavior.opaque,
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

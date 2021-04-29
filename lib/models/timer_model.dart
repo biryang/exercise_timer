@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class TimerModel {
   int index;
   String title;
