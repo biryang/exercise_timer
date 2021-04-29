@@ -8,54 +8,13 @@ import 'package:get/get.dart';
 
 import '../utils.dart';
 
-class MainPage extends StatefulWidget {
+class TimerPage extends StatefulWidget {
   @override
-  _MainPageState createState() => _MainPageState();
+  _TimerPageState createState() => _TimerPageState();
 }
 
-class _MainPageState extends State<MainPage> {
-  List<Duration> _timeList = [];
-  List<Duration> _activeList = [];
-  int _playTime = 0;
-  Timer _timer;
-  AudioCache player = AudioCache();
-
+class _TimerPageState extends State<TimerPage> {
   final controller = Get.put(RoutineController());
-
-  void _start() {
-    _timer = Timer.periodic(Duration(seconds: 1), _tick);
-  }
-
-  void _addTimer(Duration timer) {
-    setState(() {
-      _timeList.add(timer);
-      _activeList = []..addAll(_timeList);
-    });
-  }
-
-  _tick(Timer timer) {
-    setState(() {
-      _activeList[_playTime] -= Duration(seconds: 1);
-      if (_activeList[_playTime].inSeconds <= 0) {
-        _playSound('boop.mp3');
-        _playTime += 1;
-      } else if (_activeList[_playTime].inSeconds <= 3 &&
-          _activeList[_playTime].inSeconds >= 1) {
-        _playSound('pip.mp3');
-      }
-      if (_activeList.length == _playTime) {
-        _timer.cancel();
-        _playTime = 0;
-        _activeList = []..addAll(_timeList);
-        print(_activeList);
-        print(_timeList);
-      }
-    });
-  }
-
-  Future _playSound(String sound) {
-    return player.play(sound);
-  }
 
   void _startAddNewTimer(BuildContext ctx) {
     showModalBottomSheet(
@@ -78,7 +37,7 @@ class _MainPageState extends State<MainPage> {
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              _start();
+              controller.start();
             },
             tooltip: 'Increment',
             child: Icon(Icons.play_arrow),
@@ -123,8 +82,8 @@ class _MainPageState extends State<MainPage> {
                   ),
                   Expanded(
                     child: ListView(
-                      children: (_.timers.map((mapTime) {
-                            print(mapTime);
+                      children:
+                      (_.timerList.map((_data) {
                             return Container(
                               margin: const EdgeInsets.all(16),
                               padding: const EdgeInsets.symmetric(
@@ -152,15 +111,11 @@ class _MainPageState extends State<MainPage> {
                               child: Column(
                                 children: [
                                   Text(
-                                    formatTime(mapTime),
+                                    formatTime(Duration(seconds: _data.timeout)),
                                     style: TextStyle(
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  // DurationPickerDialog(
-                                  //   initialDuration: Duration(seconds: 0),
-                                  //   title: Text('타이머'),
-                                  // )
                                 ],
                               ),
                             );

@@ -8,6 +8,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
+import 'controllers/routineController.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var prefs = await SharedPreferences.getInstance();
@@ -36,19 +38,23 @@ class _TimerAppState extends State<TimerApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: MainPage());
+    return MaterialApp(home: TimerPage());
   }
 }
 
 class MyApp extends StatelessWidget {
+  final controller = Get.put(RoutineController());
+
   @override
   Widget build(BuildContext context) {
+    controller.readRoutine();
+
     return GetMaterialApp(
       home: RoutinePage(),
       getPages: [
         GetPage(
           name: 'timer_page',
-          page: () => MainPage(),
+          page: () => TimerPage(),
         ),
         GetPage(
           name: 'routine_page',

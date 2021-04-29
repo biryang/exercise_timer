@@ -17,13 +17,9 @@ class _NewTimerState extends State<NewTimer> {
   int seconds = 0;
 
   void _submitData() {
-    print(titleController.text);
-    print('${minutes}');
-    print('${seconds}');
-    controller.addTimes(
+    controller.addTimer(
       title: titleController.text,
-      minutes: minutes,
-      seconds: seconds,
+      timeout: (minutes * 60)  + seconds,
     );
   }
 

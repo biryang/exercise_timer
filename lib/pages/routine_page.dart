@@ -82,7 +82,7 @@ class RoutinePage extends StatelessWidget {
                             return Container(
                               child: GestureDetector(
                                 onTap: (){
-                                  Get.to(MainPage());
+                                  Get.to(TimerPage());
                                 },
                                 child: Container(
                                   margin: const EdgeInsets.all(16),
