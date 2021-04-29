@@ -1,6 +1,7 @@
 import 'package:exercise_timer/models.dart';
 import 'package:exercise_timer/models/routine_model.dart';
-import 'package:exercise_timer/pages/main_screen.dart';
+import 'package:exercise_timer/pages/timer_page.dart';
+import 'package:exercise_timer/pages/routine_page.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -13,8 +14,8 @@ void main() async {
 
   await Hive.initFlutter();
   Hive.registerAdapter(RoutineModelAdapter());
-
-  runApp(TimerApp(settings: Settings(prefs), prefs: prefs));
+  runApp(MyApp());
+  // runApp(TimerApp(settings: Settings(prefs), prefs: prefs));
 }
 
 class TimerApp extends StatefulWidget {
@@ -35,6 +36,26 @@ class _TimerAppState extends State<TimerApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: MainScreen());
+    return MaterialApp(home: MainPage());
+  }
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      home: RoutinePage(),
+      getPages: [
+        GetPage(
+          name: 'timer_page',
+          page: () => MainPage(),
+        ),
+        GetPage(
+          name: 'routine_page',
+          page: () => RoutinePage(),
+        ),
+      ],
+      theme: ThemeData(fontFamily: 'NotoSans'),
+    );
   }
 }
