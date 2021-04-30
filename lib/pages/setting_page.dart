@@ -1,31 +1,33 @@
 import 'package:exercise_timer/controllers/mainController.dart';
-import 'package:exercise_timer/pages/timer_page.dart';
-import 'package:exercise_timer/widgets/new_routine_card.dart';
-import 'package:exercise_timer/widgets/routine_card.dart';
+import 'package:exercise_timer/widgets/new_timer_card.dart';
+import 'package:exercise_timer/widgets/timer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class RoutinePage extends StatelessWidget {
-  final controller = Get.put(MainController());
+class SettingPage extends StatelessWidget {
+  final int routineKey;
+  final String routineValue;
 
-  void onRoute(Map<int, String> data) {
-    Get.to(TimerPage(
-      routineKey: data.keys.first,
-      routineValue: data.values.first,
-    ));
-  }
+  SettingPage({this.routineKey, this.routineValue});
+
+  final controller = Get.put(MainController());
 
   @override
   Widget build(BuildContext context) {
+    controller.readTimer(key: routineKey);
     return GetBuilder<MainController>(
       builder: (_) {
         return Scaffold(
           floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              controller.timerState();
+            },
             tooltip: 'Increment',
-            child: Icon(Icons.play_arrow),
+            child: controller.playBtn == btnStart
+                ? Icon(Icons.play_arrow)
+                : Icon(Icons.pause),
             elevation: 2.0,
           ),
           bottomNavigationBar: BottomAppBar(
@@ -38,9 +40,7 @@ class RoutinePage extends StatelessWidget {
                   children: <Widget>[
                     IconButton(
                       icon: Icon(Icons.list),
-                      onPressed: () {
-                        controller.readRoutine();
-                      },
+                      onPressed: () {},
                     ),
                     Text(''),
                     IconButton(
@@ -55,33 +55,28 @@ class RoutinePage extends StatelessWidget {
             color: Colors.white,
           ),
           body: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Text(
-                    '루틴을 추가해주세요!',
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    '${this.routineKey} : ${this.routineValue}\n타이머를 추가해주세요!',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-                Expanded(
-                  child: ListView(
-                    children: (controller.routineList.map((_data) {
-                          return Container(
-                            child: RoutineCard(
-                              title: '${_data.values.first}',
-                              onTap: () => onRoute(_data),
-                            ),
-                          );
-                        }).toList()) +
-                        [Container(child: NewRoutineCard())],
+                  Expanded(
+                    child: ListView(
+                      children: (_.timerList.map((_data) {
+                        return Container(child: TimerCard(_data.timeout));
+                      }).toList()) +
+                          [Container(child: NewTimerCard(routineKey))],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RoutineCard extends StatelessWidget {
   final Function onTap;
@@ -11,8 +12,8 @@ class RoutineCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.all(16),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFF6448FE), Color(0xFF5FC6FF)],
@@ -30,10 +31,28 @@ class RoutineCard extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(24)),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '$title',
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                FaIcon(FontAwesomeIcons.edit),
+              ],
+            ),
+            SizedBox(height: 16),
             Text(
-              '$title',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              'Time : ',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ],
         ),

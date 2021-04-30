@@ -47,22 +47,25 @@ class _NewRoutineState extends State<NewRoutine> {
               Text('Select Card Color'),
               Divider(),
               Container(
-                child: ColorPicker(
-                  onColorChanged: (Color color) => {print(color)},
-                  color: Colors.red,
-                  padding: EdgeInsets.all(0.0),
-                  elevation: 2,
-                  spacing: 24,
-                  runSpacing: 10,
-                  enableShadesSelection: false,
-                  pickersEnabled: {
-                    ColorPickerType.both: false,
-                    ColorPickerType.primary: false,
-                    ColorPickerType.accent: true,
-                    ColorPickerType.bw: false,
-                    ColorPickerType.custom: false,
-                    ColorPickerType.wheel: false,
-                  },
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: ColorPicker(
+                    onColorChanged: (Color color) => {print(color)},
+                    color: Color(0xffff5252),
+                    padding: EdgeInsets.all(0.0),
+                    spacing: 10,
+                    borderRadius: 20,
+                    elevation: 2,
+                    enableShadesSelection: false,
+                    pickersEnabled: {
+                      ColorPickerType.both: false,
+                      ColorPickerType.primary: false,
+                      ColorPickerType.accent: true,
+                      ColorPickerType.bw: false,
+                      ColorPickerType.custom: false,
+                      ColorPickerType.wheel: false,
+                    },
+                  ),
                 ),
               ),
               Container(
