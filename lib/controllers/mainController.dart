@@ -14,6 +14,7 @@ class MainController extends GetxController {
   List<Map<int, String>> routineList = [];
   List<TimerModel> timerList = [];
   String playBtn = btnStart;
+  int selectRoutineKey = 0;
   int _playTime = 0;
   Timer _timer;
   AudioCache _player = AudioCache();
@@ -81,6 +82,12 @@ class MainController extends GetxController {
     } else {
       timerList = [];
     }
+    update();
+  }
+
+  onReorder(int oldIndex, int newIndex) {
+    TimerModel moveTimer = timerList.removeAt(oldIndex);
+    timerList.insert(newIndex, moveTimer);
     update();
   }
 

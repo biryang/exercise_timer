@@ -1,4 +1,5 @@
 import 'package:exercise_timer/controllers/mainController.dart';
+import 'package:exercise_timer/pages/setting_page.dart';
 import 'package:exercise_timer/pages/timer_page.dart';
 import 'package:exercise_timer/widgets/new_routine_card.dart';
 import 'package:exercise_timer/widgets/routine_card.dart';
@@ -12,7 +13,7 @@ class RoutinePage extends StatelessWidget {
     Get.to(TimerPage(
       routineKey: data.keys.first,
       routineValue: data.values.first,
-    ));
+    ),transition: Transition.fadeIn);
   }
 
   @override
@@ -22,12 +23,12 @@ class RoutinePage extends StatelessWidget {
         return Scaffold(
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {},
-            tooltip: 'Increment',
-            child: Icon(Icons.play_arrow),
-            elevation: 2.0,
-          ),
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: () {},
+          //   tooltip: 'Increment',
+          //   child: Icon(Icons.play_arrow),
+          //   elevation: 2.0,
+          // ),
           bottomNavigationBar: BottomAppBar(
             child: Padding(
               padding: EdgeInsets.all(16),
@@ -45,7 +46,9 @@ class RoutinePage extends StatelessWidget {
                     Text(''),
                     IconButton(
                       icon: Icon(Icons.settings),
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(SettingPage());
+                      },
                     ),
                   ],
                 ),

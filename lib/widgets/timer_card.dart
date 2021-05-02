@@ -4,14 +4,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../utils.dart';
 
 class TimerCard extends StatelessWidget {
+  final key;
   final title;
   final timeout;
 
-  TimerCard({this.title, this.timeout});
+  TimerCard({this.key, this.title, this.timeout});
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: key,
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(

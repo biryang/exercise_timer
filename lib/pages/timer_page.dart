@@ -3,6 +3,7 @@ import 'package:exercise_timer/widgets/new_timer_card.dart';
 import 'package:exercise_timer/widgets/timer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reorderables/reorderables.dart';
 
 class TimerPage extends StatelessWidget {
   final int routineKey;
@@ -68,12 +69,24 @@ class TimerPage extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: ListView(
-                      children: (_.timerList.map((_data) {
-                            return Container(child: TimerCard(_data.timeout));
-                          }).toList()) +
-                          [Container(child: NewTimerCard(routineKey))],
-                    ),
+                    child: ReorderableColumn(
+                        enabled: true,
+                        onReorder: _.onReorder,
+                        draggingWidgetOpacity: 0,
+                        children: (_.timerList.map((_data) {
+                              return Container(
+                                key: ValueKey(_data.timeout),
+                                child: TimerCard(
+                                  title: _data.title,
+                                  timeout: _data.timeout,
+                                ),
+                              );
+                            }).toList()) +
+                            [
+                              Container(
+                                  key: ValueKey(10),
+                                  child: NewTimerCard(routineKey))
+                            ]),
                   ),
                 ],
               ),

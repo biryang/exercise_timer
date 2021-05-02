@@ -37,6 +37,9 @@ dependencies:
   get: ^4.1.4
   flex_color_picker: ^2.0.1
   font_awesome_flutter: ^9.0.0
+  reorderables:
+    path: ../packages/reorderables-master/
+#  reorderables: ^0.4.1
 
 dev_dependencies:
   flutter_test:
