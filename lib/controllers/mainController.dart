@@ -14,10 +14,15 @@ class MainController extends GetxController {
   List<Map<int, String>> routineList = [];
   List<TimerModel> timerList = [];
   String playBtn = btnStart;
-  int selectRoutineKey = 0;
+  Map<int, String> selectRoutine = {};
   int _playTime = 0;
   Timer _timer;
   AudioCache _player = AudioCache();
+
+  selectRoutines(Map<int, String> select) {
+    selectRoutine = select;
+    update();
+  }
 
   addRoutine(String routineTitle) async {
     var _box = await Hive.openBox<RoutineModel>('routines');
@@ -45,7 +50,8 @@ class MainController extends GetxController {
     print('read items ${_box.length}');
   }
 
-  addTimer({int key, String title, int timeout}) async {
+  addTimer({String title, int timeout}) async {
+    int _key = selectRoutine.keys.first;
     var _box = await Hive.openBox<RoutineModel>('routines');
     String toJson;
     timerList.add(TimerModel(
@@ -57,22 +63,23 @@ class MainController extends GetxController {
     toJson = jsonEncode(timerList);
     print(toJson);
     _box.put(
-        key,
+        _key,
         RoutineModel(
-            title: _box.get(key).title,
-            index: _box.get(key).index,
+            title: _box.get(_key).title,
+            index: _box.get(_key).index,
             timerList: toJson));
     update();
   }
 
-  readTimer({int key}) async {
+  readTimer() async {
+    int _key = selectRoutine.keys.first;
     var _box = await Hive.openBox<RoutineModel>('routines');
     List<TimerModel> _tempList = [];
 
-    print('routineTitle : ${_box.get(key).title}');
-    print('timerList : ${_box.get(key).timerList}');
-    if (_box.get(key).timerList != null) {
-      for (var data in jsonDecode(_box.get(key).timerList)) {
+    print('routineTitle : ${_box.get(_key).title}');
+    print('timerList : ${_box.get(_key).timerList}');
+    if (_box.get(_key).timerList != null) {
+      for (var data in jsonDecode(_box.get(_key).timerList)) {
         _tempList.add(TimerModel(
             title: data['title'],
             index: data['index'],
@@ -85,9 +92,21 @@ class MainController extends GetxController {
     update();
   }
 
-  onReorder(int oldIndex, int newIndex) {
+  onReorder(int oldIndex, int newIndex) async {
+    int _key = selectRoutine.keys.first;
+    var _box = await Hive.openBox<RoutineModel>('routines');
+    String toJson;
+
     TimerModel moveTimer = timerList.removeAt(oldIndex);
     timerList.insert(newIndex, moveTimer);
+    toJson = jsonEncode(timerList);
+    print(toJson);
+    _box.put(
+        _key,
+        RoutineModel(
+            title: _box.get(_key).title,
+            index: _box.get(_key).index,
+            timerList: toJson));
     update();
   }
 

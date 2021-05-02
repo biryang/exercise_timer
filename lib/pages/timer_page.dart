@@ -1,21 +1,19 @@
 import 'package:exercise_timer/controllers/mainController.dart';
 import 'package:exercise_timer/widgets/new_timer_card.dart';
 import 'package:exercise_timer/widgets/timer_card.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reorderables/reorderables.dart';
 
 class TimerPage extends StatelessWidget {
-  final int routineKey;
-  final String routineValue;
 
-  TimerPage({this.routineKey, this.routineValue});
 
   final controller = Get.put(MainController());
 
   @override
   Widget build(BuildContext context) {
-    controller.readTimer(key: routineKey);
+    controller.readTimer();
     return GetBuilder<MainController>(
       builder: (_) {
         return Scaffold(
@@ -56,40 +54,35 @@ class TimerPage extends StatelessWidget {
             color: Colors.white,
           ),
           body: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    '${this.routineKey} : ${this.routineValue}\n타이머를 추가해주세요!',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                    '타이머를 추가해주세요!',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Expanded(
-                    child: ReorderableColumn(
-                        enabled: true,
-                        onReorder: _.onReorder,
-                        draggingWidgetOpacity: 0,
-                        children: (_.timerList.map((_data) {
-                              return Container(
-                                key: ValueKey(_data.timeout),
-                                child: TimerCard(
-                                  title: _data.title,
-                                  timeout: _data.timeout,
-                                ),
-                              );
-                            }).toList()) +
-                            [
-                              Container(
-                                  key: ValueKey(10),
-                                  child: NewTimerCard(routineKey))
-                            ]),
-                  ),
-                ],
-              ),
+                ),
+                Expanded(
+                  child: ReorderableColumn(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      footer: NewTimerCard(),
+                      enabled: true,
+                      onReorder: _.onReorder,
+                      draggingWidgetOpacity: 0,
+                      children: (_.timerList.map((_data) {
+                        return TimerCard(
+                          key: ValueKey(_data.timeout),
+                          title: _data.title,
+                          timeout: _data.timeout,
+                        );
+                      }).toList())),
+                ),
+              ],
             ),
           ),
         );

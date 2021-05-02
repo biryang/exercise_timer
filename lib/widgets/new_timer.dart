@@ -4,10 +4,6 @@ import 'package:get/get.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class NewTimer extends StatefulWidget {
-  final int routineKey;
-
-  NewTimer(this.routineKey);
-
   @override
   _NewTimerState createState() => _NewTimerState();
 }
@@ -20,7 +16,6 @@ class _NewTimerState extends State<NewTimer> {
 
   void _submitData() {
     controller.addTimer(
-      key: widget.routineKey,
       title: titleController.text,
       timeout: (minutes * 60) + seconds,
     );
@@ -42,7 +37,7 @@ class _NewTimerState extends State<NewTimer> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               TextField(
-                decoration: InputDecoration(labelText: '${widget.routineKey} Title'),
+                decoration: InputDecoration(labelText: 'Title'),
                 controller: titleController,
               ),
               Container(

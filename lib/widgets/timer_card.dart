@@ -1,3 +1,4 @@
+import 'package:exercise_timer/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -14,8 +15,8 @@ class TimerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       key: key,
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      margin: kCardMargin,
+      padding: kCardPadding,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [

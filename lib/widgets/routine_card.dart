@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../constants.dart';
+
 class RoutineCard extends StatelessWidget {
   final Function onTap;
   final String title;
@@ -12,8 +14,8 @@ class RoutineCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        margin: kCardMargin,
+        padding: kCardPadding,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFF6448FE), Color(0xFF5FC6FF)],

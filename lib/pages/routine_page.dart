@@ -9,11 +9,9 @@ import 'package:get/get.dart';
 class RoutinePage extends StatelessWidget {
   final controller = Get.put(MainController());
 
-  void onRoute(Map<int, String> data) {
-    Get.to(TimerPage(
-      routineKey: data.keys.first,
-      routineValue: data.values.first,
-    ),transition: Transition.fadeIn);
+  void onRutine(Map<int, String> data) {
+    controller.selectRoutines(data);
+    Get.to(TimerPage(), transition: Transition.fadeIn);
   }
 
   @override
@@ -58,7 +56,7 @@ class RoutinePage extends StatelessWidget {
             color: Colors.white,
           ),
           body: SafeArea(
-            child: Column(
+            child:Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
@@ -77,7 +75,7 @@ class RoutinePage extends StatelessWidget {
                           return Container(
                             child: RoutineCard(
                               title: '${_data.values.first}',
-                              onTap: () => onRoute(_data),
+                              onTap: () => onRutine(_data),
                             ),
                           );
                         }).toList()) +

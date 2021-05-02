@@ -2,12 +2,10 @@ import 'package:exercise_timer/controllers/mainController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../constants.dart';
 import 'new_timer.dart';
 
 class NewTimerCard extends StatelessWidget {
-  final int routineKey;
-
-  NewTimerCard(this.routineKey);
 
   final controller = Get.put(MainController());
 
@@ -16,7 +14,7 @@ class NewTimerCard extends StatelessWidget {
       context: context,
       builder: (_) {
         return GestureDetector(
-          child: NewTimer(routineKey),
+          child: NewTimer(),
           behavior: HitTestBehavior.opaque,
         );
       },
@@ -30,8 +28,8 @@ class NewTimerCard extends StatelessWidget {
         _startAddNewTimer(context);
       },
       child: Container(
-        margin: const EdgeInsets.all(16),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        margin: kCardMargin,
+        padding: kCardPadding,
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [

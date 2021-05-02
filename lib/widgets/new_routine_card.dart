@@ -3,6 +3,8 @@ import 'package:exercise_timer/widgets/new_routine.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../constants.dart';
+
 class NewRoutineCard extends StatelessWidget {
   final controller = Get.put(MainController());
 
@@ -29,8 +31,8 @@ class NewRoutineCard extends StatelessWidget {
         _startAddNewTimer(context);
       },
       child: Container(
-        margin: const EdgeInsets.all(16),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        margin: kCardMargin,
+        padding: kCardPadding,
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
