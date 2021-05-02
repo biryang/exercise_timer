@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../utils.dart';
 
 class TimerCard extends StatelessWidget {
+  final title;
   final timeout;
 
-  TimerCard(this.timeout);
+  TimerCard({this.title, this.timeout});
 
   @override
   Widget build(BuildContext context) {
@@ -13,27 +15,28 @@ class TimerCard extends StatelessWidget {
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFF6448FE), Color(0xFF5FC6FF)],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
+        color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Color(0xFF5FC6FF).withOpacity(0.4),
-            blurRadius: 8,
-            spreadRadius: 2,
-            offset: Offset(4, 4),
+            color: Color(0xFF000000).withOpacity(0.25),
+            blurRadius: 2,
+            offset: Offset(0, 2),
           ),
         ],
         borderRadius: BorderRadius.all(Radius.circular(24)),
       ),
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Text(
+            title,
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
           Text(
             formatTime(Duration(seconds: timeout)),
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
+          FaIcon(FontAwesomeIcons.sort),
         ],
       ),
     );
