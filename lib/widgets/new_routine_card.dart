@@ -9,7 +9,7 @@ class NewRoutineCard extends StatelessWidget {
   final controller = Get.put(MainController());
 
   void _addTimer(String title) {
-    controller.addRoutine(title);
+    controller.addRoutine(title: title);
   }
 
   void _startAddNewTimer(BuildContext ctx) {

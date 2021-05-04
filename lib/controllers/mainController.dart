@@ -24,20 +24,20 @@ class MainController extends GetxController {
     update();
   }
 
-  addRoutine(String routineTitle) async {
+  addRoutine({String title}) async {
     var _box = await Hive.openBox<RoutineModel>('routines');
     _box.add(
       RoutineModel(
-        title: routineTitle,
+        title: title,
         index: 1,
       ),
     );
     readRoutine();
 
-    print('routine $routineTitle add');
+    print('routine $title add');
   }
 
-  readRoutine() async {
+  readRoutine({String title}) async {
     var _box = await Hive.openBox<RoutineModel>('routines');
     List<Map<int, String>> readRoutines = [];
     for (int index = 0; index < _box.length; index++) {
@@ -48,6 +48,24 @@ class MainController extends GetxController {
     update();
 
     print('read items ${_box.length}');
+  }
+
+  modifyRoutine({String title}) async {
+    int _key = selectRoutine.keys.first;
+    var _box = await Hive.openBox<RoutineModel>('routines');
+    String toJson;
+
+    toJson = jsonEncode(timerList);
+    print(toJson);
+    _box.put(
+        _key,
+        RoutineModel(
+            title: title,
+            index: _box.get(_key).index,
+            timerList: _box.get(_key).timerList));
+    readRoutine();
+
+    update();
   }
 
   addTimer({String title, int timeout}) async {

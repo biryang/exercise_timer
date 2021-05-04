@@ -5,9 +5,11 @@ import '../constants.dart';
 
 class RoutineCard extends StatelessWidget {
   final Function onTap;
+  final Function onIconBtn;
   final String title;
+  final Widget icon;
 
-  RoutineCard({this.title, this.onTap});
+  RoutineCard({this.title, this.onTap, this.icon, this.onIconBtn});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,10 @@ class RoutineCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: Colors.white),
                 ),
-                FaIcon(FontAwesomeIcons.edit),
+                IconButton(
+                  icon: icon,
+                  onPressed: onIconBtn,
+                ),
               ],
             ),
             SizedBox(height: 16),
