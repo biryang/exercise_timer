@@ -20,19 +20,22 @@ class RoutineModelAdapter extends TypeAdapter<RoutineModel> {
       title: fields[0] as String,
       index: fields[1] as int,
       timerList: fields[2] as String,
+      color: fields[3] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, RoutineModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
       ..write(obj.index)
       ..writeByte(2)
-      ..write(obj.timerList);
+      ..write(obj.timerList)
+      ..writeByte(3)
+      ..write(obj.color);
   }
 
   @override

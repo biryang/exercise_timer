@@ -1,4 +1,5 @@
 import 'package:exercise_timer/controllers/mainController.dart';
+import 'package:exercise_timer/models/routine_model.dart';
 import 'package:exercise_timer/pages/setting_page.dart';
 import 'package:exercise_timer/pages/timer_page.dart';
 import 'package:exercise_timer/widgets/new_routine.dart';
@@ -11,7 +12,7 @@ import 'package:get/get.dart';
 class RoutinePage extends StatelessWidget {
   final controller = Get.put(MainController());
 
-  void onRutine(Map<int, String> data) {
+  void onRutine(RoutineModel data) {
     controller.selectRoutines(data);
     Get.to(TimerPage(), transition: Transition.fadeIn);
   }
@@ -20,7 +21,7 @@ class RoutinePage extends StatelessWidget {
     controller.modifyRoutine(title: title);
   }
 
-  void _onIconBtn(BuildContext ctx, Map<int, String> data) {
+  void _onIconBtn(BuildContext ctx, RoutineModel data) {
     controller.selectRoutines(data);
     showModalBottomSheet(
       context: ctx,
@@ -93,9 +94,10 @@ class RoutinePage extends StatelessWidget {
                     children: (controller.routineList.map((_data) {
                           return Container(
                             child: RoutineCard(
-                              title: '${_data.values.first}',
+                              title: '${_data.title}',
                               onTap: () => onRutine(_data),
                               icon: FaIcon(FontAwesomeIcons.edit),
+                              color: _data.color,
                               onIconBtn: () => _onIconBtn(context, _data),
                             ),
                           );

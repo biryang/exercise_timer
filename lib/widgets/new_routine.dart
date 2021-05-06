@@ -12,12 +12,14 @@ class NewRoutine extends StatefulWidget {
 
 class _NewRoutineState extends State<NewRoutine> {
   final titleController = TextEditingController();
+  int color = 0;
   int minutes = 0;
   int seconds = 0;
 
   void _submitData() {
+    print(color);
     setState(() {
-      widget.addRoutine(titleController.text);
+      widget.addRoutine(titleController.text, color);
     });
     Navigator.pop(context);
   }
@@ -50,7 +52,7 @@ class _NewRoutineState extends State<NewRoutine> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: ColorPicker(
-                    onColorChanged: (Color color) => {print(color)},
+                    onColorChanged: (Color selColor) => {color = selColor.value},
                     color: Color(0xffff5252),
                     padding: EdgeInsets.all(0.0),
                     spacing: 10,

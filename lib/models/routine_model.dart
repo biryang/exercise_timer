@@ -10,10 +10,13 @@ class RoutineModel extends HiveObject {
   int index;
   @HiveField(2)
   String timerList;
+  @HiveField(3)
+  int color;
 
   RoutineModel({
     this.title,
     this.index,
     this.timerList,
+    this.color,
   });
 }

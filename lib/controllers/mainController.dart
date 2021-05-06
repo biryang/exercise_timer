@@ -11,26 +11,23 @@ const btnStart = 'start';
 const btnStop = 'stop';
 
 class MainController extends GetxController {
-  List<Map<int, String>> routineList = [];
+  List<RoutineModel> routineList = [];
   List<TimerModel> timerList = [];
   String playBtn = btnStart;
-  Map<int, String> selectRoutine = {};
+  RoutineModel selectRoutine;
   int _playTime = 0;
   Timer _timer;
   AudioCache _player = AudioCache();
 
-  selectRoutines(Map<int, String> select) {
+  selectRoutines(RoutineModel select) {
     selectRoutine = select;
     update();
   }
 
-  addRoutine({String title}) async {
+  addRoutine({String title, int color}) async {
     var _box = await Hive.openBox<RoutineModel>('routines');
     _box.add(
-      RoutineModel(
-        title: title,
-        index: 1,
-      ),
+      RoutineModel(title: title, index: 1, color: color),
     );
     readRoutine();
 
@@ -39,10 +36,14 @@ class MainController extends GetxController {
 
   readRoutine({String title}) async {
     var _box = await Hive.openBox<RoutineModel>('routines');
-    List<Map<int, String>> readRoutines = [];
+    List<RoutineModel> readRoutines = [];
     for (int index = 0; index < _box.length; index++) {
       print('index : $index, key: ${_box.getAt(index).key}');
-      readRoutines.add({_box.getAt(index).key: _box.getAt(index).title});
+      readRoutines.add(RoutineModel(
+        index: _box.getAt(index).key,
+        title: _box.getAt(index).title,
+        color : _box.getAt(index).color,
+      ));
     }
     routineList = readRoutines;
     update();
@@ -51,7 +52,7 @@ class MainController extends GetxController {
   }
 
   modifyRoutine({String title}) async {
-    int _key = selectRoutine.keys.first;
+    int _key = selectRoutine.index;
     var _box = await Hive.openBox<RoutineModel>('routines');
     String toJson;
 
@@ -69,7 +70,7 @@ class MainController extends GetxController {
   }
 
   addTimer({String title, int timeout}) async {
-    int _key = selectRoutine.keys.first;
+    int _key = selectRoutine.index;
     var _box = await Hive.openBox<RoutineModel>('routines');
     String toJson;
     timerList.add(TimerModel(
@@ -90,7 +91,7 @@ class MainController extends GetxController {
   }
 
   readTimer() async {
-    int _key = selectRoutine.keys.first;
+    int _key = selectRoutine.index;
     var _box = await Hive.openBox<RoutineModel>('routines');
     List<TimerModel> _tempList = [];
 
@@ -111,7 +112,7 @@ class MainController extends GetxController {
   }
 
   onReorder(int oldIndex, int newIndex) async {
-    int _key = selectRoutine.keys.first;
+    int _key = selectRoutine.index;
     var _box = await Hive.openBox<RoutineModel>('routines');
     String toJson;
 

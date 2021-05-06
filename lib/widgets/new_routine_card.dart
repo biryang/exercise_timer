@@ -8,8 +8,8 @@ import '../constants.dart';
 class NewRoutineCard extends StatelessWidget {
   final controller = Get.put(MainController());
 
-  void _addTimer(String title) {
-    controller.addRoutine(title: title);
+  void _addTimer(String title,int color) {
+    controller.addRoutine(title: title, color: color);
   }
 
   void _startAddNewTimer(BuildContext ctx) {

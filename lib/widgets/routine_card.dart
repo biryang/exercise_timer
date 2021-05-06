@@ -8,8 +8,9 @@ class RoutineCard extends StatelessWidget {
   final Function onIconBtn;
   final String title;
   final Widget icon;
+  final int color;
 
-  RoutineCard({this.title, this.onTap, this.icon, this.onIconBtn});
+  RoutineCard({this.title, this.onTap, this.icon, this.onIconBtn, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class RoutineCard extends StatelessWidget {
         padding: kCardPadding,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF6448FE), Color(0xFF5FC6FF)],
+            colors: [Color(color), Color(0xFF5FC6FF)],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
