@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../constants.dart';
-import 'new_timer.dart';
+import 'input_timer.dart';
 
 class NewTimerCard extends StatelessWidget {
 

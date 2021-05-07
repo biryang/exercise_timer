@@ -1,5 +1,5 @@
 import 'package:exercise_timer/controllers/mainController.dart';
-import 'package:exercise_timer/widgets/new_routine.dart';
+import 'package:exercise_timer/widgets/input_routine.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

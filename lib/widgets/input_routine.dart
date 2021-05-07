@@ -12,7 +12,7 @@ class NewRoutine extends StatefulWidget {
 
 class _NewRoutineState extends State<NewRoutine> {
   final titleController = TextEditingController();
-  int color = 0;
+  int color = 0xffff5252;
   int minutes = 0;
   int seconds = 0;
 

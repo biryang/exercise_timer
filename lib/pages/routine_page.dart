@@ -2,7 +2,7 @@ import 'package:exercise_timer/controllers/mainController.dart';
 import 'package:exercise_timer/models/routine_model.dart';
 import 'package:exercise_timer/pages/setting_page.dart';
 import 'package:exercise_timer/pages/timer_page.dart';
-import 'package:exercise_timer/widgets/new_routine.dart';
+import 'package:exercise_timer/widgets/input_routine.dart';
 import 'package:exercise_timer/widgets/new_routine_card.dart';
 import 'package:exercise_timer/widgets/routine_card.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +29,32 @@ class RoutinePage extends StatelessWidget {
         return GestureDetector(
           child: NewRoutine(_modifyRoutine),
           behavior: HitTestBehavior.opaque,
+        );
+      },
+    );
+  }
+
+  void _onRemove(BuildContext ctx, RoutineModel data) {
+    showDialog(
+      context: ctx,
+      builder: (_) {
+        return AlertDialog(
+          title: Text("삭제하시겠습니까?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                controller.removeRoutine(data);
+                Navigator.pop(ctx);
+              },
+              child: Text('삭제'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+              },
+              child: Text('취소'),
+            ),
+          ],
         );
       },
     );
@@ -98,7 +124,7 @@ class RoutinePage extends StatelessWidget {
                               onTap: () => onRutine(_data),
                               icon: FaIcon(FontAwesomeIcons.edit),
                               color: _data.color,
-                              onIconBtn: () => _onIconBtn(context, _data),
+                              onIconBtn: () => _onRemove(context, _data),
                             ),
                           );
                         }).toList()) +
