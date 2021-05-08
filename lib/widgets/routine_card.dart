@@ -21,16 +21,16 @@ class RoutineCard extends StatelessWidget {
         padding: kCardPadding,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(color), Color(0xFF5FC6FF)],
+            colors: [Color(color), Color(color).withOpacity(0.5)],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
           boxShadow: [
             BoxShadow(
-              color: Color(0xFF5FC6FF).withOpacity(0.4),
-              blurRadius: 8,
+              color: Color(color).withOpacity(0.4),
+              blurRadius: 6,
               spreadRadius: 2,
-              offset: Offset(4, 4),
+              offset: Offset(2, 2),
             ),
           ],
           borderRadius: BorderRadius.all(Radius.circular(24)),

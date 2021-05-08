@@ -17,44 +17,24 @@ class RoutinePage extends StatelessWidget {
     Get.to(TimerPage(), transition: Transition.fadeIn);
   }
 
-  void _modifyRoutine(String title) {
-    controller.modifyRoutine(title: title);
+  void _modifyRoutine(String title, int color) {
+    controller.modifyRoutine(
+      title: title,
+      color: color,
+    );
   }
 
-  void _onIconBtn(BuildContext ctx, RoutineModel data) {
+  void _onModify(BuildContext ctx, RoutineModel data) {
     controller.selectRoutines(data);
     showModalBottomSheet(
       context: ctx,
       builder: (_) {
         return GestureDetector(
-          child: NewRoutine(_modifyRoutine),
+          child: InputRoutine(
+            inputRoutine: _modifyRoutine,
+            routine: data,
+          ),
           behavior: HitTestBehavior.opaque,
-        );
-      },
-    );
-  }
-
-  void _onRemove(BuildContext ctx, RoutineModel data) {
-    showDialog(
-      context: ctx,
-      builder: (_) {
-        return AlertDialog(
-          title: Text("삭제하시겠습니까?"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                controller.removeRoutine(data);
-                Navigator.pop(ctx);
-              },
-              child: Text('삭제'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(ctx);
-              },
-              child: Text('취소'),
-            ),
-          ],
         );
       },
     );
@@ -91,7 +71,7 @@ class RoutinePage extends StatelessWidget {
                     IconButton(
                       icon: Icon(Icons.settings),
                       onPressed: () {
-                        Get.to(SettingPage());
+                        Get.to(SettingPage(), transition: Transition.fadeIn);
                       },
                     ),
                   ],
@@ -124,7 +104,7 @@ class RoutinePage extends StatelessWidget {
                               onTap: () => onRutine(_data),
                               icon: FaIcon(FontAwesomeIcons.edit),
                               color: _data.color,
-                              onIconBtn: () => _onRemove(context, _data),
+                              onIconBtn: () => _onModify(context, _data),
                             ),
                           );
                         }).toList()) +

@@ -26,9 +26,10 @@ class MainController extends GetxController {
 
   addRoutine({String title, int color}) async {
     var _box = await Hive.openBox<RoutineModel>('routines');
+
     print(color);
     _box.add(
-      RoutineModel(title: title, index: 1, color: color),
+      RoutineModel(title: title, color: color),
     );
     readRoutine();
 
@@ -55,11 +56,11 @@ class MainController extends GetxController {
     }
     routineList = readRoutines;
     update();
-
+    // _box.clear();
     print('read items ${_box.length}');
   }
 
-  modifyRoutine({String title}) async {
+  modifyRoutine({String title, int color}) async {
     int _key = selectRoutine.index;
     var _box = await Hive.openBox<RoutineModel>('routines');
     String toJson;
@@ -71,7 +72,7 @@ class MainController extends GetxController {
         RoutineModel(
             title: title,
             index: _box.get(_key).index,
-            color: _box.get(_key).color,
+            color: color,
             timerList: _box.get(_key).timerList));
     readRoutine();
 
@@ -95,6 +96,7 @@ class MainController extends GetxController {
         RoutineModel(
             title: _box.get(_key).title,
             index: _box.get(_key).index,
+            color: _box.get(_key).color,
             timerList: toJson));
     update();
   }

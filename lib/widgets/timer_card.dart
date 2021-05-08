@@ -31,13 +31,21 @@ class TimerCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            formatTime(Duration(seconds: timeout)),
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(fontSize: 24),
+              ),
+              Text(
+                formatTime(Duration(seconds: timeout)),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
           FaIcon(FontAwesomeIcons.sort),
         ],

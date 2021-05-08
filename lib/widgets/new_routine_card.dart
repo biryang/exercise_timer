@@ -8,7 +8,7 @@ import '../constants.dart';
 class NewRoutineCard extends StatelessWidget {
   final controller = Get.put(MainController());
 
-  void _addTimer(String title,int color) {
+  void _addTimer(String title, int color) {
     controller.addRoutine(title: title, color: color);
   }
 
@@ -17,7 +17,7 @@ class NewRoutineCard extends StatelessWidget {
       context: ctx,
       builder: (_) {
         return GestureDetector(
-          child: NewRoutine(_addTimer),
+          child: InputRoutine(inputRoutine: _addTimer),
           behavior: HitTestBehavior.opaque,
         );
       },
