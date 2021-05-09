@@ -122,6 +122,24 @@ class MainController extends GetxController {
     update();
   }
 
+  removeTimer(int index) async {
+    int _key = selectRoutine.index;
+    var _box = await Hive.openBox<RoutineModel>('routines');
+    String toJson;
+
+    timerList.removeAt(index);
+    toJson = jsonEncode(timerList);
+    print(toJson);
+    _box.put(
+        _key,
+        RoutineModel(
+            title: _box.get(_key).title,
+            index: _box.get(_key).index,
+            color: _box.get(_key).color,
+            timerList: toJson));
+    update();
+  }
+
   onReorder(int oldIndex, int newIndex) async {
     int _key = selectRoutine.index;
     var _box = await Hive.openBox<RoutineModel>('routines');
@@ -136,6 +154,7 @@ class MainController extends GetxController {
         RoutineModel(
             title: _box.get(_key).title,
             index: _box.get(_key).index,
+            color: _box.get(_key).color,
             timerList: toJson));
     update();
   }
@@ -146,14 +165,21 @@ class MainController extends GetxController {
         timerStart();
         break;
       case btnStop:
-        timerStop();
+        timerPause();
         break;
     }
+  }
+
+  timerPause() {
+    playBtn = btnStart;
+    _timer.cancel();
+    update();
   }
 
   timerStop() {
     playBtn = btnStart;
     _timer.cancel();
+    _playTime = 0;
     update();
   }
 
@@ -173,8 +199,7 @@ class MainController extends GetxController {
       _playSound('pip.mp3');
     }
     if (timerList.length == _playTime) {
-      _timer.cancel();
-      _playTime = 0;
+      timerPause();
     }
     update();
   }

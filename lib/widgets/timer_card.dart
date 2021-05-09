@@ -8,8 +8,9 @@ class TimerCard extends StatelessWidget {
   final key;
   final title;
   final timeout;
+  final onRemove;
 
-  TimerCard({this.key, this.title, this.timeout});
+  TimerCard({this.key, this.title, this.timeout, this.onRemove});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +48,10 @@ class TimerCard extends StatelessWidget {
               ),
             ],
           ),
-          FaIcon(FontAwesomeIcons.sort),
+          IconButton(
+            icon: FaIcon(FontAwesomeIcons.trash),
+            onPressed: onRemove,
+          ),
         ],
       ),
     );
